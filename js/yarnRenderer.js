@@ -16,7 +16,7 @@ export class YarnRenderer {
     
     // Animation state
     this.isAnimating = false;
-    this.animationDuration = 2.0; // seconds
+    this.animationDuration = 3.2; // seconds
     this.animationStartTime = 0;
     
     this.init();
@@ -46,8 +46,8 @@ export class YarnRenderer {
     
     console.log('Using dimensions:', { width, height, aspect });
     
-    this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
-    this.camera.position.set(0, 0, 12);
+    this.camera = new THREE.PerspectiveCamera(28, aspect, 0.1, 1000);
+    this.camera.position.set(0, 0, 16);
     this.camera.lookAt(0, 0, 0);
 
     // Renderer setup
@@ -108,15 +108,18 @@ export class YarnRenderer {
    */
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
+    this.time += 0.016;
     
     // Update twist animation if active
     if (this.isAnimating) {
       this.updateTwistAnimation();
     }
-    
-    // Rotate yarn slowly for continuous animation
-    if (this.yarnMesh && !this.isAnimating) {
-      this.yarnMesh.rotation.y += 0.005;
+
+    // After tightening completes, keep a slow rotisserie-style spin.
+    if (this.yarnMesh && !this.isAnimating && this.yarnMesh.userData.strands) {
+      this.yarnMesh.userData.strands.forEach((strand) => {
+        this.updateConvergingStrandGeometry(strand, 1.0, this.time * 0.28);
+      });
     }
     
     this.renderer.render(this.scene, this.camera);
@@ -132,48 +135,17 @@ export class YarnRenderer {
     // Smooth easing function
     const eased = this.easeInOutCubic(progress);
     
-    // Rotate entire group for twisting effect
-    if (this.yarnMesh) {
-      const maxRotation = Math.PI * 4; // 4 full rotations
-      this.yarnMesh.rotation.y = eased * maxRotation;
+    // Tighten each strand from left-to-right into a knit-ready ply
+    if (this.yarnMesh && this.yarnMesh.userData.strands) {
+      this.yarnMesh.userData.strands.forEach((strand) => {
+        this.updateConvergingStrandGeometry(strand, eased, this.time * 1.2);
+      });
     }
     
     // Stop animation when complete
     if (progress >= 1.0) {
       this.isAnimating = false;
     }
-  }
-
-  /**
-   * Update individual strand twist based on animation progress
-   */
-  updateStrandTwist(strand, progress, strandIndex) {
-    const geometry = strand.geometry;
-    const positions = geometry.attributes.position.array;
-    const initialPositions = strand.userData.initialPositions;
-    
-    if (!initialPositions) return;
-    
-    // Calculate twist parameters
-    const twistIntensity = strand.userData.twistIntensity || 1.0;
-    const currentTwist = progress * twistIntensity * Math.PI * 6;
-    
-    // Apply twist to each vertex
-    for (let i = 0; i < positions.length; i += 3) {
-      const x = initialPositions[i];
-      const y = initialPositions[i + 1];
-      const z = initialPositions[i + 2];
-      
-      // Calculate twist angle based on y position
-      const angle = currentTwist * (y / 3);
-      
-      // Apply rotation around the vertical axis
-      positions[i] = x * Math.cos(angle) - z * Math.sin(angle);
-      positions[i + 2] = x * Math.sin(angle) + z * Math.cos(angle);
-    }
-    
-    geometry.attributes.position.needsUpdate = true;
-    geometry.computeVertexNormals();
   }
 
   /**
@@ -245,63 +217,23 @@ export class YarnRenderer {
     try {
       console.log('createTwistingStrand called:', { color, length, radius, offset, twistIntensity });
       
-      const segments = 120;
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(segments * 3);
-      
-      // Store initial positions for animation
-      const initialPositions = new Float32Array(segments * 3);
-      
-      // Create vertical strand with proper helical path for plying
-      for (let i = 0; i < segments; i++) {
-        const t = i / (segments - 1);
-        const y = (t - 0.5) * length;
-        
-        // For multi-strand plying, create helical path around center
-        // For single strand, stay mostly straight with minimal wave
-        const twistAmount = offset.x === 0 && offset.z === 0 ? 0.5 : 4.0;
-        const helixAngle = t * Math.PI * twistAmount;
-        const helixRadius = Math.sqrt(offset.x * offset.x + offset.z * offset.z);
-        
-        if (helixRadius > 0.01) {
-          // Multiple strands - create helical plying
-          const baseAngle = Math.atan2(offset.z, offset.x);
-          positions[i * 3] = Math.cos(baseAngle + helixAngle) * helixRadius;
-          positions[i * 3 + 1] = y;
-          positions[i * 3 + 2] = Math.sin(baseAngle + helixAngle) * helixRadius;
-        } else {
-          // Single strand - minimal wave to avoid NaN
-          const waveRadius = radius * 0.02;
-          positions[i * 3] = Math.cos(helixAngle) * waveRadius;
-          positions[i * 3 + 1] = y;
-          positions[i * 3 + 2] = Math.sin(helixAngle) * waveRadius;
-        }
-        
-        // Store initial positions
-        initialPositions[i * 3] = positions[i * 3];
-        initialPositions[i * 3 + 1] = positions[i * 3 + 1];
-        initialPositions[i * 3 + 2] = positions[i * 3 + 2];
-      }
-      
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      
-      console.log('Creating curve with', segments, 'segments');
-      
-      // Create tube geometry from line
-      const points = [];
-      for (let i = 0; i < segments; i++) {
-        points.push(new THREE.Vector3(
-          positions[i * 3],
-          positions[i * 3 + 1],
-          positions[i * 3 + 2]
-        ));
-      }
-      
+      const startYOffset = offset.y || 0;
+      const startZOffset = offset.z || 0;
+      const baseAngle = Math.atan2(startYOffset, startZOffset || 0.0001);
+
+      console.log('Creating horizontal converging curve');
+      const points = this.buildConvergingCurve({
+        length,
+        strandRadius: radius,
+        startYOffset,
+        startZOffset,
+        baseAngle,
+        twistIntensity
+      }, 0.0, 0.0);
+
       const curve = new THREE.CatmullRomCurve3(points);
-      
       console.log('Creating tube geometry');
-      // Reduce segments for better performance and stability
-      const tubeGeometry = new THREE.TubeGeometry(curve, 64, radius, 6, false);
+      const tubeGeometry = new THREE.TubeGeometry(curve, 90, radius, 8, false);
       
       console.log('Creating material');
       const material = new THREE.MeshStandardMaterial({
@@ -313,13 +245,18 @@ export class YarnRenderer {
       console.log('Creating mesh');
       const strand = new THREE.Mesh(tubeGeometry, material);
       
-      // Store data for animation
-      strand.userData.initialPositions = initialPositions;
-      strand.userData.twistIntensity = twistIntensity;
-      
-      console.log('Adding fiber hairs');
-      // Add fiber hairs to strand
-      this.addFiberHairsHelix(strand, radius, color);
+      // Store parametric values so geometry can tighten over time
+      strand.userData.curveParams = {
+        length,
+        strandRadius: radius,
+        startYOffset,
+        startZOffset,
+        baseAngle,
+        twistIntensity
+      };
+      strand.userData.tubeSegments = 90;
+      strand.userData.radialSegments = 8;
+      strand.userData.tightness = 0.0;
       
       console.log('Strand created successfully');
       return strand;
@@ -367,6 +304,64 @@ export class YarnRenderer {
   }
 
   /**
+   * Create a horizontal strand path that converges and tightens to the right.
+   */
+  buildConvergingCurve(params, tightness, phaseOffset = 0) {
+    const points = [];
+    const segments = 90;
+    const startRadius = Math.max(
+      Math.sqrt(params.startYOffset * params.startYOffset + params.startZOffset * params.startZOffset),
+      params.strandRadius * 0.35
+    );
+    const tightenFactor = 1.0 - 0.65 * tightness;
+
+    for (let i = 0; i < segments; i++) {
+      const t = i / (segments - 1);
+      const x = (t - 0.5) * params.length;
+
+      // Gradual left-to-right merge: bundle radius collapses toward one yarn at right.
+      const converge = Math.pow(1 - t, 1.08);
+      const orbitRadius = startRadius * converge * tightenFactor;
+
+      // True plying: each strand orbits the shared centerline as it travels along X.
+      const turns = params.twistIntensity * (1.4 + 3.0 * tightness) * (0.45 + 2.8 * t);
+      const theta = params.baseAngle + (Math.PI * 2 * turns * t) + phaseOffset * 0.15;
+
+      // Tiny per-strand wobble keeps the yarn from looking mechanically perfect.
+      const wobble = params.strandRadius * 0.05;
+      const y = orbitRadius * Math.cos(theta) + Math.sin(theta * 2.0) * wobble;
+      const z = orbitRadius * Math.sin(theta) + Math.cos(theta * 1.6) * wobble * 0.75;
+      points.push(new THREE.Vector3(x, y, z));
+    }
+
+    return points;
+  }
+
+  /**
+   * Rebuild one strand mesh from its parametric converging curve.
+   */
+  updateConvergingStrandGeometry(strand, tightness, phaseOffset) {
+    const params = strand.userData.curveParams;
+    if (!params) {
+      return;
+    }
+
+    const points = this.buildConvergingCurve(params, tightness, phaseOffset);
+    const curve = new THREE.CatmullRomCurve3(points);
+    const nextGeometry = new THREE.TubeGeometry(
+      curve,
+      strand.userData.tubeSegments || 90,
+      params.strandRadius,
+      strand.userData.radialSegments || 8,
+      false
+    );
+
+    strand.geometry.dispose();
+    strand.geometry = nextGeometry;
+    strand.userData.tightness = tightness;
+  }
+
+  /**
    * Render combined yarn strands with plying visualization
    */
   renderCombinedStrands(strands) {
@@ -386,14 +381,14 @@ export class YarnRenderer {
     
     // Calculate strand arrangement based on average thickness
     const avgThickness = strands.reduce((sum, s) => sum + (s.thickness || 2.0), 0) / strandCount;
-    const baseRadius = 0.06; // Base size for reference
-    const arrangeRadius = strandCount > 1 ? avgThickness * 0.15 : 0;
+    const baseRadius = 0.09; // Base size for reference
+    const arrangeRadius = strandCount > 1 ? avgThickness * 1.1 : baseRadius * 0.5;
     
     // Create each strand
     const strandMeshes = strands.map((strand, index) => {
-      const angle = (index / strandCount) * Math.PI * 2;
+      const angle = (index / Math.max(strandCount, 1)) * Math.PI * 2;
       const offset = {
-        x: Math.cos(angle) * arrangeRadius,
+        y: Math.cos(angle) * arrangeRadius,
         z: Math.sin(angle) * arrangeRadius
       };
       
@@ -410,7 +405,7 @@ export class YarnRenderer {
       // Create twisting strand
       const mesh = this.createTwistingStrand(
         strand.color,
-        6, // length
+        13.5, // horizontal length
         strandRadius,
         offset,
         strand.twistIntensity || 1.0
@@ -423,6 +418,36 @@ export class YarnRenderer {
     
     // Add all strands to group
     strandMeshes.forEach(mesh => group.add(mesh));
+
+    // Add a subtle visual guide showing flow direction (left -> right).
+    const flowGuideMaterial = new THREE.LineDashedMaterial({
+      color: 0xb0b0b0,
+      dashSize: 0.18,
+      gapSize: 0.12,
+      transparent: true,
+      opacity: 0.75
+    });
+    const flowGuideGeometry = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-6.7, -0.62, -0.9),
+      new THREE.Vector3(6.7, -0.62, -0.9)
+    ]);
+    const flowGuide = new THREE.Line(flowGuideGeometry, flowGuideMaterial);
+    flowGuide.computeLineDistances();
+    group.add(flowGuide);
+
+    const startDot = new THREE.Mesh(
+      new THREE.SphereGeometry(0.06, 12, 12),
+      new THREE.MeshBasicMaterial({ color: 0x6b6b6b })
+    );
+    startDot.position.set(-6.7, -0.62, -0.9);
+    group.add(startDot);
+
+    const endDot = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 12, 12),
+      new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    endDot.position.set(6.7, -0.62, -0.9);
+    group.add(endDot);
     
     // Store strand references
     group.userData.strands = strandMeshes;

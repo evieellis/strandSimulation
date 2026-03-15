@@ -28,7 +28,7 @@
   </script>
 
   <script type="module">
-    import { YarnRenderer } from './js/yarnRenderer.js';
+    import { YarnRenderer } from './js/yarnRenderer.js?v=horizontal-final-2';
 
     console.log('Test script loaded');
 
@@ -46,7 +46,6 @@
       ];
       renderer.renderCombinedStrands(strands);
     });
-
     document.getElementById('clear-btn').addEventListener('click', () => {
       renderer.clear();
     });
