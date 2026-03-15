@@ -228,7 +228,8 @@ export class YarnRenderer {
         startYOffset,
         startZOffset,
         baseAngle,
-        twistIntensity
+        twistIntensity,
+        strandCount: offset.strandCount || 2
       }, 0.0, 0.0);
 
       const curve = new THREE.CatmullRomCurve3(points);
@@ -252,7 +253,8 @@ export class YarnRenderer {
         startYOffset,
         startZOffset,
         baseAngle,
-        twistIntensity
+        twistIntensity,
+        strandCount: offset.strandCount || 2
       };
       strand.userData.tubeSegments = 90;
       strand.userData.radialSegments = 8;
@@ -309,6 +311,7 @@ export class YarnRenderer {
   buildConvergingCurve(params, tightness, phaseOffset = 0) {
     const points = [];
     const segments = 90;
+    const strandCount = Math.max(1, params.strandCount || 1);
     const startRadius = Math.max(
       Math.sqrt(params.startYOffset * params.startYOffset + params.startZOffset * params.startZOffset),
       params.strandRadius * 0.35
@@ -320,8 +323,12 @@ export class YarnRenderer {
       const x = (t - 0.5) * params.length;
 
       // Gradual left-to-right merge: bundle radius collapses toward one yarn at right.
-      const converge = Math.pow(1 - t, 1.08);
-      const orbitRadius = startRadius * converge * tightenFactor;
+      const baseConverge = Math.pow(1 - t, 1.08);
+      // Keep a tiny shared radius for 3+ strands so each ply remains visible at the right end.
+      const minConverge = strandCount > 2 ? 0.2 : 0.0;
+      const converge = minConverge + (1 - minConverge) * baseConverge;
+      const startOrbitRadius = startRadius * tightenFactor;
+      const orbitRadius = startOrbitRadius * converge;
 
       // True plying: each strand orbits the shared centerline as it travels along X.
       const turns = params.twistIntensity * (1.4 + 3.0 * tightness) * (0.45 + 2.8 * t);
@@ -382,18 +389,20 @@ export class YarnRenderer {
     // Calculate strand arrangement based on average thickness
     const avgThickness = strands.reduce((sum, s) => sum + (s.thickness || 2.0), 0) / strandCount;
     const baseRadius = 0.09; // Base size for reference
-    const arrangeRadius = strandCount > 1 ? avgThickness * 1.1 : baseRadius * 0.5;
+    const arrangeRadius = strandCount > 1 ? avgThickness * (1.1 + Math.min(strandCount, 6) * 0.06) : baseRadius * 0.5;
     
     // Create each strand
     const strandMeshes = strands.map((strand, index) => {
       const angle = (index / Math.max(strandCount, 1)) * Math.PI * 2;
       const offset = {
         y: Math.cos(angle) * arrangeRadius,
-        z: Math.sin(angle) * arrangeRadius
+        z: Math.sin(angle) * arrangeRadius,
+        strandCount
       };
       
       // Calculate radius based on yarn thickness
-      const strandRadius = baseRadius * (strand.thickness || 2.0) / 2.0; // Scale relative to worsted weight
+      const strandRadiusScale = 1 / Math.pow(Math.max(strandCount, 1), 0.2);
+      const strandRadius = baseRadius * (strand.thickness || 2.0) / 2.0 * strandRadiusScale; // Slightly thinner plies for higher strand counts
       
       console.log(`Creating strand ${index}:`, { 
         color: strand.color, 
