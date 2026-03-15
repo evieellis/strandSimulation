@@ -1,0 +1,246 @@
+{
+  "grid": { "rows": 3, "cols": 4, "stitchSize": { "w": 1.0, "h": 1.2 } },
+  "loops": [
+    { "id": "r0c0", "row": 0, "col": 0, "parentId": null,
+      "geometry": {
+        "top": { "center": [0.5, 0.18], "shoulders": { "left": [0.04, 0.18], "right": [0.96, 0.18] } },
+        "neck": { "center": [0.5, 0.36], "width": 0.12 },
+        "legs": {
+          "left": [[0.38, 1.14], [0.32, 0.84], [0.44, 0.60], [0.44, 0.36]],
+          "right": [[0.62, 1.14], [0.68, 0.84], [0.56, 0.60], [0.56, 0.36]]
+        },
+        "emerge": { "fromParent": null, "throughRegion": null, "entry": null, "zOrder": [] }
+      },
+      "connections": { "prevInRow": null, "nextInRow": "r0c1" }
+    },
+    { "id": "r0c1", "row": 0, "col": 1, "parentId": null,
+      "geometry": {
+        "top": { "center": [1.5, 0.18], "shoulders": { "left": [1.04, 0.18], "right": [1.96, 0.18] } },
+        "neck": { "center": [1.5, 0.36], "width": 0.12 },
+        "legs": {
+          "left": [[1.38, 1.14], [1.32, 0.84], [1.44, 0.60], [1.44, 0.36]],
+          "right": [[1.62, 1.14], [1.68, 0.84], [1.56, 0.60], [1.56, 0.36]]
+        },
+        "emerge": { "fromParent": null, "throughRegion": null, "entry": null, "zOrder": [] }
+      },
+      "connections": { "prevInRow": "r0c0", "nextInRow": "r0c2" }
+    },
+    { "id": "r0c2", "row": 0, "col": 2, "parentId": null,
+      "geometry": {
+        "top": { "center": [2.5, 0.18], "shoulders": { "left": [2.04, 0.18], "right": [2.96, 0.18] } },
+        "neck": { "center": [2.5, 0.36], "width": 0.12 },
+        "legs": {
+          "left": [[2.38, 1.14], [2.32, 0.84], [2.44, 0.60], [2.44, 0.36]],
+          "right": [[2.62, 1.14], [2.68, 0.84], [2.56, 0.60], [2.56, 0.36]]
+        },
+        "emerge": { "fromParent": null, "throughRegion": null, "entry": null, "zOrder": [] }
+      },
+      "connections": { "prevInRow": "r0c1", "nextInRow": "r0c3" }
+    },
+    { "id": "r0c3", "row": 0, "col": 3, "parentId": null,
+      "geometry": {
+        "top": { "center": [3.5, 0.18], "shoulders": { "left": [3.04, 0.18], "right": [3.96, 0.18] } },
+        "neck": { "center": [3.5, 0.36], "width": 0.12 },
+        "legs": {
+          "left": [[3.38, 1.14], [3.32, 0.84], [3.44, 0.60], [3.44, 0.36]],
+          "right": [[3.62, 1.14], [3.68, 0.84], [3.56, 0.60], [3.56, 0.36]]
+        },
+        "emerge": { "fromParent": null, "throughRegion": null, "entry": null, "zOrder": [] }
+      },
+      "connections": { "prevInRow": "r0c2", "nextInRow": null }
+    },
+
+    { "id": "r1c0", "row": 1, "col": 0, "parentId": "r0c0",
+      "geometry": {
+        "top": { "center": [0.5, 1.38], "shoulders": { "left": [0.04, 1.38], "right": [0.96, 1.38] } },
+        "neck": { "center": [0.5, 1.56], "width": 0.12 },
+        "legs": {
+          "left": [[0.46, 2.34], [0.38, 2.04], [0.42, 1.80], [0.44, 1.56]],
+          "right": [[0.54, 2.34], [0.62, 2.04], [0.58, 1.80], [0.56, 1.56]]
+        },
+        "emerge": {
+          "fromParent": "r0c0",
+          "throughRegion": "topArc",
+          "entry": [0.5, 0.18],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 1.48 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 1.48 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": null, "nextInRow": "r1c1" }
+    },
+    { "id": "r1c1", "row": 1, "col": 1, "parentId": "r0c1",
+      "geometry": {
+        "top": { "center": [1.5, 1.38], "shoulders": { "left": [1.04, 1.38], "right": [1.96, 1.38] } },
+        "neck": { "center": [1.5, 1.56], "width": 0.12 },
+        "legs": {
+          "left": [[1.46, 2.34], [1.38, 2.04], [1.42, 1.80], [1.44, 1.56]],
+          "right": [[1.54, 2.34], [1.62, 2.04], [1.58, 1.80], [1.56, 1.56]]
+        },
+        "emerge": {
+          "fromParent": "r0c1",
+          "throughRegion": "topArc",
+          "entry": [1.5, 0.18],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 1.48 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 1.48 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r1c0", "nextInRow": "r1c2" }
+    },
+    { "id": "r1c2", "row": 1, "col": 2, "parentId": "r0c2",
+      "geometry": {
+        "top": { "center": [2.5, 1.38], "shoulders": { "left": [2.04, 1.38], "right": [2.96, 1.38] } },
+        "neck": { "center": [2.5, 1.56], "width": 0.12 },
+        "legs": {
+          "left": [[2.46, 2.34], [2.38, 2.04], [2.42, 1.80], [2.44, 1.56]],
+          "right": [[2.54, 2.34], [2.62, 2.04], [2.58, 1.80], [2.56, 1.56]]
+        },
+        "emerge": {
+          "fromParent": "r0c2",
+          "throughRegion": "topArc",
+          "entry": [2.5, 0.18],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 1.48 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 1.48 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r1c1", "nextInRow": "r1c3" }
+    },
+    { "id": "r1c3", "row": 1, "col": 3, "parentId": "r0c3",
+      "geometry": {
+        "top": { "center": [3.5, 1.38], "shoulders": { "left": [3.04, 1.38], "right": [3.96, 1.38] } },
+        "neck": { "center": [3.5, 1.56], "width": 0.12 },
+        "legs": {
+          "left": [[3.46, 2.34], [3.38, 2.04], [3.42, 1.80], [3.44, 1.56]],
+          "right": [[3.54, 2.34], [3.62, 2.04], [3.58, 1.80], [3.56, 1.56]]
+        },
+        "emerge": {
+          "fromParent": "r0c3",
+          "throughRegion": "topArc",
+          "entry": [3.5, 0.18],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 1.48 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 1.48 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r1c2", "nextInRow": null }
+    },
+
+    { "id": "r2c0", "row": 2, "col": 0, "parentId": "r1c0",
+      "geometry": {
+        "top": { "center": [0.5, 2.58], "shoulders": { "left": [0.04, 2.58], "right": [0.96, 2.58] } },
+        "neck": { "center": [0.5, 2.76], "width": 0.12 },
+        "legs": {
+          "left": [[0.46, 3.54], [0.38, 3.24], [0.42, 3.00], [0.44, 2.76]],
+          "right": [[0.54, 3.54], [0.62, 3.24], [0.58, 3.00], [0.56, 2.76]]
+        },
+        "emerge": {
+          "fromParent": "r1c0",
+          "throughRegion": "topArc",
+          "entry": [0.5, 1.38],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 2.68 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 2.68 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": null, "nextInRow": "r2c1" }
+    },
+    { "id": "r2c1", "row": 2, "col": 1, "parentId": "r1c1",
+      "geometry": {
+        "top": { "center": [1.5, 2.58], "shoulders": { "left": [1.04, 2.58], "right": [1.96, 2.58] } },
+        "neck": { "center": [1.5, 2.76], "width": 0.12 },
+        "legs": {
+          "left": [[1.46, 3.54], [1.38, 3.24], [1.42, 3.00], [1.44, 2.76]],
+          "right": [[1.54, 3.54], [1.62, 3.24], [1.58, 3.00], [1.56, 2.76]]
+        },
+        "emerge": {
+          "fromParent": "r1c1",
+          "throughRegion": "topArc",
+          "entry": [1.5, 1.38],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 2.68 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 2.68 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r2c0", "nextInRow": "r2c2" }
+    },
+    { "id": "r2c2", "row": 2, "col": 2, "parentId": "r1c2",
+      "geometry": {
+        "top": { "center": [2.5, 2.58], "shoulders": { "left": [2.04, 2.58], "right": [2.96, 2.58] } },
+        "neck": { "center": [2.5, 2.76], "width": 0.12 },
+        "legs": {
+          "left": [[2.46, 3.54], [2.38, 3.24], [2.42, 3.00], [2.44, 2.76]],
+          "right": [[2.54, 3.54], [2.62, 3.24], [2.58, 3.00], [2.56, 2.76]]
+        },
+        "emerge": {
+          "fromParent": "r1c2",
+          "throughRegion": "topArc",
+          "entry": [2.5, 1.38],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 2.68 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 2.68 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r2c1", "nextInRow": "r2c3" }
+    },
+    { "id": "r2c3", "row": 2, "col": 3, "parentId": "r1c3",
+      "geometry": {
+        "top": { "center": [3.5, 2.58], "shoulders": { "left": [3.04, 2.58], "right": [3.96, 2.58] } },
+        "neck": { "center": [3.5, 2.76], "width": 0.12 },
+        "legs": {
+          "left": [[3.46, 3.54], [3.38, 3.24], [3.42, 3.00], [3.44, 2.76]],
+          "right": [[3.54, 3.54], [3.62, 3.24], [3.58, 3.00], [3.56, 2.76]]
+        },
+        "emerge": {
+          "fromParent": "r1c3",
+          "throughRegion": "topArc",
+          "entry": [3.5, 1.38],
+          "zOrder": [
+            { "segment": "enterBelowArc", "order": "under", "yUntil": 2.68 },
+            { "segment": "riseToNeck", "order": "over", "yFrom": 2.68 }
+          ]
+        }
+      },
+      "connections": { "prevInRow": "r2c2", "nextInRow": null }
+    }
+  ],
+  "yarnPath": [
+    { "order": 0, "from": null, "to": "r0c0", "segmentType": "castOnEntry", "direction": "LTR",
+      "points": [[0.5, 1.14], [0.5, 0.18]] },
+
+    { "order": 1, "from": "r0c0", "to": "r0c1", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[0.96, 0.18], [1.04, 0.18]] },
+    { "order": 2, "from": "r0c1", "to": "r0c2", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[1.96, 0.18], [2.04, 0.18]] },
+    { "order": 3, "from": "r0c2", "to": "r0c3", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[2.96, 0.18], [3.04, 0.18]] },
+
+    { "order": 4, "from": "r0c3", "to": "r1c3", "segmentType": "rowTurnDown", "direction": "DOWN",
+      "points": [[3.5, 0.18], [3.5, 1.38]] },
+
+    { "order": 5, "from": "r1c3", "to": "r1c2", "segmentType": "rowHeadConnection", "direction": "RTL",
+      "points": [[3.04, 1.38], [2.96, 1.38]] },
+    { "order": 6, "from": "r1c2", "to": "r1c1", "segmentType": "rowHeadConnection", "direction": "RTL",
+      "points": [[2.04, 1.38], [1.96, 1.38]] },
+    { "order": 7, "from": "r1c1", "to": "r1c0", "segmentType": "rowHeadConnection", "direction": "RTL",
+      "points": [[1.04, 1.38], [0.96, 1.38]] },
+
+    { "order": 8, "from": "r1c0", "to": "r2c0", "segmentType": "rowTurnDown", "direction": "DOWN",
+      "points": [[0.5, 1.38], [0.5, 2.58]] },
+
+    { "order": 9, "from": "r2c0", "to": "r2c1", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[0.96, 2.58], [1.04, 2.58]] },
+    { "order": 10, "from": "r2c1", "to": "r2c2", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[1.96, 2.58], [2.04, 2.58]] },
+    { "order": 11, "from": "r2c2", "to": "r2c3", "segmentType": "rowHeadConnection", "direction": "LTR",
+      "points": [[2.96, 2.58], [3.04, 2.58]] }
+  ]
+}

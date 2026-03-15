@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Yarn Renderer</title>
+  <style>
+    body { margin: 0; padding: 20px; background: #fafafa; }
+    #test-canvas { width: 800px; height: 600px; border: 2px solid #333; display: block; }
+    .controls { margin: 20px 0; }
+    button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Yarn Renderer Test</h1>
+  <div class="controls">
+    <button id="test-btn">Render Yarn</button>
+    <button id="clear-btn">Clear</button>
+  </div>
+  <canvas id="test-canvas"></canvas>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { YarnRenderer } from './js/yarnRenderer.js';
+
+    console.log('Test script loaded');
+
+    const canvas = document.getElementById('test-canvas');
+    console.log('Canvas:', canvas);
+
+    const renderer = new YarnRenderer(canvas);
+    console.log('Renderer created:', renderer);
+
+    document.getElementById('test-btn').addEventListener('click', () => {
+      console.log('Render button clicked');
+      const strands = [
+        { color: '#ff6b6b', twistIntensity: 1.0 },
+        { color: '#4ecdc4', twistIntensity: 1.0 }
+      ];
+      renderer.renderCombinedStrands(strands);
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      renderer.clear();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Module Test</title>
+</head>
+<body>
+    <h1>Testing Module Imports</h1>
+    <div id="log"></div>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+    </script>
+
+    <script type="module">
+        const log = document.getElementById('log');
+        
+        function addLog(msg) {
+            console.log(msg);
+            const p = document.createElement('p');
+            p.textContent = msg;
+            log.appendChild(p);
+        }
+
+        addLog('1. Starting tests...');
+
+        try {
+            addLog('2. Importing THREE...');
+            const THREE = await import('three');
+            addLog('3. THREE imported: ' + (typeof THREE));
+            addLog('4. THREE.Scene: ' + (typeof THREE.Scene));
+            
+            addLog('5. Importing YarnRenderer...');
+            const { YarnRenderer } = await import('./js/yarnRenderer.js');
+            addLog('6. YarnRenderer imported: ' + (typeof YarnRenderer));
+            
+            addLog('7. All imports successful!');
+        } catch (error) {
+            addLog('ERROR: ' + error.message);
+            console.error('Full error:', error);
+        }
+    </script>
+</body>
+</html>

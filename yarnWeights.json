@@ -1,0 +1,188 @@
+{
+  "weights": [
+    {
+      "id": 0,
+      "name": "Lace",
+      "wpi": 35,
+      "thickness": 0.8,
+      "gauge": {
+        "stitches": 30,
+        "rows": 42,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "2.0-2.75",
+        "us": "0-2"
+      },
+      "visual": {
+        "color": "#e8e8e8",
+        "twist": 0.4
+      }
+    },
+    {
+      "id": 1,
+      "name": "Fingering",
+      "wpi": 18,
+      "thickness": 1.5,
+      "gauge": {
+        "stitches": 28,
+        "rows": 36,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "2.75-3.5",
+        "us": "2-4"
+      },
+      "visual": {
+        "color": "#d0d0d0",
+        "twist": 0.5
+      }
+    },
+    {
+      "id": 2,
+      "name": "Sport",
+      "wpi": 14,
+      "thickness": 2.0,
+      "gauge": {
+        "stitches": 24,
+        "rows": 32,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "3.5-4.5",
+        "us": "4-6"
+      },
+      "visual": {
+        "color": "#b8b8b8",
+        "twist": 0.6
+      }
+    },
+    {
+      "id": 3,
+      "name": "DK",
+      "wpi": 12,
+      "thickness": 2.5,
+      "gauge": {
+        "stitches": 22,
+        "rows": 30,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "4.0-5.0",
+        "us": "6-8"
+      },
+      "visual": {
+        "color": "#a0a0a0",
+        "twist": 0.65
+      }
+    },
+    {
+      "id": 4,
+      "name": "Worsted",
+      "wpi": 9,
+      "thickness": 3.0,
+      "gauge": {
+        "stitches": 18,
+        "rows": 24,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "4.5-5.5",
+        "us": "7-9"
+      },
+      "visual": {
+        "color": "#888888",
+        "twist": 0.7
+      }
+    },
+    {
+      "id": 5,
+      "name": "Aran",
+      "wpi": 8,
+      "thickness": 3.5,
+      "gauge": {
+        "stitches": 16,
+        "rows": 22,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "5.0-6.0",
+        "us": "8-10"
+      },
+      "visual": {
+        "color": "#707070",
+        "twist": 0.75
+      }
+    },
+    {
+      "id": 6,
+      "name": "Bulky",
+      "wpi": 6,
+      "thickness": 4.5,
+      "gauge": {
+        "stitches": 12,
+        "rows": 16,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "6.0-9.0",
+        "us": "10-11"
+      },
+      "visual": {
+        "color": "#585858",
+        "twist": 0.8
+      }
+    },
+    {
+      "id": 7,
+      "name": "Jumbo",
+      "wpi": 4,
+      "thickness": 6.0,
+      "gauge": {
+        "stitches": 8,
+        "rows": 12,
+        "per": "4 inches"
+      },
+      "needleSize": {
+        "mm": "9.0+",
+        "us": "13+"
+      },
+      "visual": {
+        "color": "#404040",
+        "twist": 0.85
+      }
+    }
+  ],
+  "suggestedCombinations": [
+    {
+      "strands": [1, 1],
+      "result": 2,
+      "description": "Two fingering = sport"
+    },
+    {
+      "strands": [1, 1, 1],
+      "result": 4,
+      "description": "Three fingering = worsted"
+    },
+    {
+      "strands": [2, 2],
+      "result": 4,
+      "description": "Two sport = worsted"
+    },
+    {
+      "strands": [3, 3],
+      "result": 5,
+      "description": "Two DK = aran"
+    },
+    {
+      "strands": [2, 3],
+      "result": 4,
+      "description": "Sport + DK = worsted"
+    },
+    {
+      "strands": [4, 4],
+      "result": 6,
+      "description": "Two worsted = bulky"
+    }
+  ]
+}

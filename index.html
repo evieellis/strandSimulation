@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Yarn Weight Experiment</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Equation Display (Top Left) -->
+    <div class="equation-display">
+      <span id="equation-text">click + add strand to begin</span>
+    </div>
+
+    <!-- Main Layout: Canvas + Controls -->
+    <div class="main-layout">
+      <!-- Three.js Canvas (Full Width) -->
+      <div class="canvas-container">
+        <canvas id="yarn-canvas"></canvas>
+      </div>
+
+      <!-- Controls Panel (Bottom) -->
+      <div class="controls-panel">
+        <!-- Strand Builder -->
+        <div class="strand-builder">
+          <h3>Build Your Yarn</h3>
+          <div id="strand-list" class="strand-list">
+            <!-- Strand rows added dynamically -->
+          </div>
+          <div class="strand-actions">
+            <button id="add-strand" class="action-btn primary">+ Add Strand</button>
+            <button id="clear-strands" class="action-btn secondary">Clear All</button>
+          </div>
+        </div>
+
+        <!-- Swatch Panel - Bigger Feature -->
+        <div class="swatch-panel featured">
+          <h3>Knit Swatch Preview</h3>
+          <canvas id="swatch-canvas" width="400" height="400"></canvas>
+          <div class="swatch-controls">
+            <div class="needle-selector">
+              <label for="needle-select">Needle Size</label>
+              <select id="needle-select">
+                <!-- Populated by JavaScript -->
+              </select>
+            </div>
+            <div id="swatch-info" class="swatch-info"></div>
+          </div>
+        </div>
+
+        <!-- Quick Suggestions -->
+        <div class="suggestions-panel">
+          <h3>Try These</h3>
+          <div id="suggestions-list" class="suggestion-cards"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js library -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+
+  <!-- Application modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
